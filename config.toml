@@ -130,10 +130,3 @@ twitter = "your-user-name"
 zhihu = "your-user-name"
 weibo = "your-user-name"
 bilibili = "your-user-name"
-other = [
-    { name = "BTC", font_awesome = "fa-brands fa-btc", url = "https://www.bitcoin.com/" }
-]
-
-# CDN links
-[extra.cdn]
-font_awesome = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"

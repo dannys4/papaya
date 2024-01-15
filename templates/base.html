@@ -10,13 +10,12 @@
 
     <title>{% block title %}{{ config.title }}{% endblock title %}</title>
     <meta name="description" content="{{ config.description }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web:300" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arimo:400,700" type="text/css">
 
     {% set color_mode_css_path = config.extra.color_mode ~ ".css" %}
     <link rel="stylesheet" href="{{ get_url(path="base.css", trailing_slash=false) }}">
     <link rel="stylesheet" href="{{ get_url(path=color_mode_css_path, trailing_slash=false) }}">
-
-    <link rel="preload" href={{ config.extra.cdn.font_awesome }} as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href={{ config.extra.cdn.font_awesome }}></noscript>
 
     {% if config.generate_feed %}
     <link rel="alternate" type={% if config.feed_filename == "atom.xml" %}"application/atom+xml"{% else %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
@@ -34,21 +33,30 @@
 <div class="container">
     {% block header %}
     {% set base_url = get_url(path="", lang=lang) %}
-    <header>
-        <h1 class="site-header">
-            <a href="{{ base_url }}">{{ config.title }}</a>
-        </h1>
-        <nav>
-            <ul>
-            {% block nav_bar %}
-            {% for subsec in config.extra.menu_items %}
-                {% set link_url = subsec.url | replace(from="$BASE_URL", to=config.base_url) | replace(from="$LANG_BASE_URL", to=base_url) %}
-                <li><a {% if current_url and current_url is starting_with(link_url) %}class="active"{% endif %} href="{{ link_url }}">{{ trans(key=subsec.name, lang=lang) }}</a></li>
-            {% endfor %}
-            {% endblock nav_bar %}
-            </ul>
-        </nav>
-    </header>
+    {% set banner = resize_image(path="/static/banner.png", width=672, op="fit_width") %}
+        <div class="banner-container">
+            <img src="{{ banner.url }}" class="banner" alt="Banner image"/>
+
+            <div class="site-header">
+                <a href="{{ base_url }}">{{ config.title }}</a>
+            </div>
+
+            <div class="site-subheader">
+                <a href="{{ config.extra.subtitle_reference }}">{{ config.extra.subtitle }}</a>
+            </div>
+        </div>
+        <header>
+            <nav>
+                <ul>
+                {% block nav_bar %}
+                {% for subsec in config.extra.menu_items %}
+                    {% set link_url = subsec.url | replace(from="$BASE_URL", to=config.base_url) | replace(from="$LANG_BASE_URL", to=base_url) %}
+                    <li><a {% if current_url and current_url is starting_with(link_url) %}class="active"{% endif %} href="{{ link_url }}">{{ trans(key=subsec.name, lang=lang) }}</a></li>
+                {% endfor %}
+                {% endblock nav_bar %}
+                </ul>
+            </nav>
+        </header>
     {% endblock header %}
     {% block content %}
     {% endblock content %}
